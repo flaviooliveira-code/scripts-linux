@@ -1,17 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #04/12/2015
+#Atualizado para 2026-03
 #
 #script para automatizar a transformação de VM como serviço
 #é preciso ter a VM no programa virtualbox e a mesma feita com o usuário root
 #use script junto com o script vboxcontrol que está na mesma pasta
 #
-#por Flávio Oliveira
-#https://github.com/oliveiradeflavio
-#http://youtube.com/flaviodicas
-#http://flaviodeoliveira.com.br
+#por Flávio Oliveira --- IGNORE ---
 
 
-if [[ `id -u` -ne 0 ]]; then
+if [[ $(id -u) -ne 0 ]]; then
 	echo
 		echo "Execute como superusuário (root)"
 		echo "Saindo..."
@@ -60,7 +58,7 @@ clear
 	echo "Registrando o Script Vboxcontrol"
 	cd /etc/init.d/
 	update-rc.d vboxcontrol start 90 2 3 4 5 . stop 10 0 1 6 .
-	chkkconfig --add vboxcontrol
+	chkconfig --add vboxcontrol
 	chkconfig vboxcontrol on
 	echo
 	echo "Instalação Concluída"
@@ -83,7 +81,7 @@ echo
 	sleep 1
 	read -n1 -p "O nome da VM é $namevmuser ?? s/n  " escolha
 		case $escolha in
-			s|N) echo
+			s|S) echo
 				vmservice
 				;;
 			n|N) echo

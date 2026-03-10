@@ -1,62 +1,69 @@
+# Scripts Linux (Atualizado para 2026)
 
-[![LinkedIn][linkedin-shield]][linkedin-url]
-![GitHub forks](https://img.shields.io/github/forks/oliveiradeflavio/scripts-linux?style=for-the-badge)
-![GitHub User's stars](https://img.shields.io/github/stars/oliveiradeflavio?style=for-the-badge)
-![GitHub followers](https://img.shields.io/github/followers/oliveiradeflavio?style=for-the-badge)
+Coleção de scripts shell para automação de tarefas comuns em Linux (Debian/Ubuntu e derivados), como limpeza do sistema, backup, instalação de pacotes e utilitários administrativos.
 
+## Status do projeto
 
-<h3 align="center">AUTOMATIZANDO ALGUMAS TAREFAS</h3>
+- Revisão geral aplicada em **10 de março de 2026**.
+- Scripts com ajustes de compatibilidade, correções de bugs e melhorias de robustez.
+- Validação sintática executada com `bash -n` nos arquivos principais.
 
+## Requisitos gerais
 
-<!-- ABOUT THE PROJECT -->
-## Sobre o Projeto
-Aqui se concentra alguns scripts para Debian, Ubuntu, Linux Mint entre outros. Você saberá o que cada script faz pelo seu próprio nome. Algumas automações foram sugestões que foram enviadas por usuários e inscritos no meu canal no Youtube. Caso tenha curiosidade, acesse: http://youtube.com/flaviodicas
+- `bash`
+- Permissões de execução (`chmod +x <script>.sh`)
+- Alguns scripts exigem `sudo/root`
+- Conexão com internet para scripts de instalação
 
+## Scripts disponíveis
 
-### Construído com
+### Administração e manutenção
 
-* [Shell Scripting](https://pt.wikipedia.org/wiki/Shell_script)
+- `autoclean-linux.sh`: limpeza de cache, pacotes órfãos e arquivos temporários.
+- `otimiza_sistema.sh`: ajustes de parâmetros de desempenho (legado).
+- `removeoldkernel.sh`: remove kernels antigos mantendo o atual.
+- `poweroff.sh`: agenda/cancela desligamento com interface `zenity`.
+- `testa_conexao.sh`: teste simples de conectividade.
 
+### Instalação e configuração
 
-<!-- GETTING STARTED -->
-## Começando
+- `install-LAMP.sh`: instalação básica de stack LAMP (Apache, MySQL, PHP).
+- `silent-install-debian.sh`: configuração de repositórios Debian modernos e instalação de pacotes base.
+- `popcorntime-install.sh`: instalar/remover Popcorn Time via Flatpak.
+- `teamspeak-install.sh`: instalar/remover TeamSpeak via Flatpak.
+- `reset-config-unity.sh`: reset de configurações do Unity (script legado).
 
-Inicialmente o script tem combatibilidade com o Ubuntu versão 14.04 32 e 64 bits, 16.04 32 e 64 bits e com o Linux Mint 18.1 32 e 64 bits.
+### Virtualização
 
-Modo de usar:
-Dê permissão de execução ao arquivo:
-```sh
-    otimizasistema.sh = tentará deixar o seu sistema mais rápido
-    limpeza.sh = limpará arquivos que não está sendo utilizados (cache de Terminal, etc)
+- `vmservice.sh`: registra VM para inicialização como serviço (fluxo legado VirtualBox).
+- `vboxcontrol`: script init para controle de VMs do VirtualBox.
+
+### Dados e backup
+
+- `backup-automatico.sh`: backup Full/Incremental com `rsync` e `zenity`.
+- `script-base-de-dados.sh`: extrai texto de PDFs e gera `dados.csv` filtrado.
+
+## Como usar
+
+1. Entre na pasta do projeto.
+2. Dê permissão de execução ao script desejado.
+3. Execute com ou sem `sudo`, conforme necessidade.
+
+Exemplos:
+
+```bash
+chmod +x autoclean-linux.sh
+sudo ./autoclean-linux.sh
 ```
 
-Execute como root: 
-```sh
-    #./nomedoarquivo.sh ou 
-    $sudo ./nomedoarquivo.sh
+```bash
+chmod +x teamspeak-install.sh
+./teamspeak-install.sh
 ```
 
+## Observações importantes
 
-### Pré-requisitos
-
- Ubuntu versão 14.04 32 e 64 bits, 16.04 32 e 64 bits e com o Linux Mint 18.1 32 e 64 bits.
-
-<!-- ROADMAP -->
-## Roadmap
-
-Veja os [problemas abertos] (https://github.com/oliveiradeflavio/scripts-linux/issues) para uma lista de recursos propostos (e problemas conhecidos).
-
-
-<!-- CONTACT -->
-## Contato
-
-Flávio Oliveira - [LinkedIn](https://www.linkedin.com/in/fladoliveira/)
-
-Link do Repositório: [https://github.com/oliveiradeflavio/scripts-linux](https://github.com/oliveiradeflavio/scripts-linux)
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/fladoliveira/
+- Alguns scripts são **legados** e podem depender de componentes antigos da distro.
+- Scripts de instalação foram adaptados para abordagens viáveis em 2026 quando possível.
+- Revise o conteúdo antes de executar em ambiente de produção.
+- Use com cautela e faça backup dos dados importantes antes de rodar scripts de manutenção ou instalação.

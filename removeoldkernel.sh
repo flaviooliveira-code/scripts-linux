@@ -1,9 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #remove kernel antigo
-#Flávio Oliveira
-#www.youtube.com/flaviodicas
-#www.flaviodeoliveira.com.br
-#13/06/2015 - Última atualização 13/02/2017
 
 #Variáveis de cores
 vermelho="\033[1;31m"
@@ -12,6 +8,11 @@ NORMAL="\033[m"
 
 menu()
 {
+if [[ $(id -u) -ne 0 ]]; then
+	echo -e "${vermelho}Execute como root (sudo).${NORMAL}"
+	exit 1
+fi
+
 clear
 echo -e "${azul}Kernel Atual do Sistema${NORMAL}"
 uname -r
@@ -29,8 +30,11 @@ read -n1 -s escolha
 case $escolha in
 	S|s) echo
 		echo -e ${vermelho}Removendo Kernels antigos${NORMAL}
-        gksudo dpkg -l 'linux-*' | sed '/^ii/!d;/'"$(uname -r | sed "s/\(.*\)-\([^0-9]\+\)/\1/")"'/d;s/^[^ ]* [^ ]* \([^ ]*\).*/\1/;/[0-9]/!d' | xargs sudo apt-get -y purge
-        gksudo update-grub     
+        dpkg -l 'linux-image-[0-9]*' \
+          | awk '/^ii/ { print $2 }' \
+          | grep -v "$(uname -r | sed 's/-generic$//')" \
+          | xargs -r apt-get -y purge
+        update-grub
         ;;
 	N|n) echo
 		echo -e ${azul}Operação Cancelada${NORMAL}

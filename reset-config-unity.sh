@@ -1,15 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #	2015-2016
+#	Atualizado para 2026-03
 #	Restaura as configurações de fábrica da Interface Unity
 #
-#	por Flávio Oliveira
-#	https://github.com/oliveiradeflavio
-#	http://youtube.com/flaviodicas
-#	http://flaviodeoliveira.com.br
-#	oliveiradeflavio@gmail.com
+#	por Flávio Oliveira --- IGNORE ---
 
 #verifica se o usuário é root (via interface zentiy)
-if [[ `id -u` -ne 0 ]]; then
+if [[ $(id -u) -ne 0 ]]; then
 	echo
 		zenity --info --text="Você precisa ter poderes administrativos (root)
 

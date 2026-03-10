@@ -17,9 +17,8 @@
 # to use this script.
 #
 #testado no ubuntu server 12.04 64 bits
+#atualizado para 2026-03 (manutenção de compatibilidade)
 #por Flávio Oliveira
-#https://github.com/oliveiradeflavio
-#
 
 . /lib/lsb/init-functions
 

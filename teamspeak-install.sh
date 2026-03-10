@@ -1,96 +1,92 @@
-#!/bin/bash
-#2016
-#Instalação do Teamspeak
-#Debian, Ubuntu, Linux Mint
-#
-#por Flávio Oliveira
-#https://github.com/oliveiradeflavio
-#http://youtube.com/flaviodicas
-#http://flaviodeoliveira.com.br
-#oliveiradeflavio@gmail.com
+#!/usr/bin/env bash
+# 2016 - Atualizado para 2026-03
+# Instalação/remoção do TeamSpeak via Flatpak.
 
-if [[ `id -u` -ne 0 ]]; then
-	echo
-		echo "Você precisa ter poderes administrativos (root)"
-		echo "O script está sendo finalizado ..."
-		sleep 4
-		exit
+set -u
+
+APP_ID="com.teamspeak.TeamSpeak"
+FLATHUB_URL="https://flathub.org/repo/flathub.flatpakrepo"
+
+if [[ $(id -u) -eq 0 ]]; then
+  echo "Execute sem root. O script usa sudo apenas quando necessário."
+  exit 1
 fi
 
-architecture()
-{
-cd /tmp/
-clear
-if which -a teamspeak 1>/dev/null 2>/dev/stdout; then
-  echo "Você já possui uma versão do Teamspeak" ; sleep 3
-else
-  if uname -m | grep '64' ; then
-    echo "Baixando Teamspeak versão 32bits"
-    echo
-    wget -b http://dl.4players.de/ts/releases/3.0.18.2/TeamSpeak3-Client-linux_x86-3.0.18.2.run -O teamspeak.run && cp teamspeak.run /opt/ && chmod +x teamspeak.run && ./teamspeak.run
-    cd /teamspeak && ./ts3client_runscript.sh
+check_connection() {
+  ping -c 2 1.1.1.1 >/dev/null 2>&1
+}
 
-  else
-    echo "Baixando Teamspeak versão 64bits"
-    echo
-    wget -b http://dl.4players.de/ts/releases/3.0.18.2/TeamSpeak3-Client-linux_amd64-3.0.18.2.run -O teamspeak.run && cp teamspeak.run /opt/ && chmod +x teamspeak.run && ./teamspeak.run
-    cd /teamspeak && ./ts3client_runscript.sh
+ensure_flatpak() {
+  if command -v flatpak >/dev/null 2>&1; then
+    return 0
   fi
-fi
-echo
-clear
+
+  echo "Flatpak não encontrado. Instalando..."
+  sudo apt-get update && sudo apt-get install -y flatpak
 }
 
-shortcuts()
-{
-clear
-cd /home/$SUDO_USER/
-echo "Ativando permissões na pasta oculta Teamspeak"
-chmod 777 -R .ts3client/
-sleep 4
-echo
-clear
-echo "Criando um Link Simbólico para o Terminal"
-ln -sf /opt/teamspeak/ts3client_runscript.sh /usr/bin/teamspeak
-echo
-echo -e "... Agora você poderá executar o programa via Terminal\n digitando teamspeak "
-sleep 4
-echo
-echo "Criando atalho no menu"
-touch /usr/share/applications/teamspeak.desktop
-echo -e "[Desktop Entry]\nName=Teamspeak\nGenericName=teamspeak\n
-Comment=comunicação\nExec=teamspeak\nTerminal=false\nType=Application\nIcon=teamspeak3\n
-Categories=Communications;"
-echo
-echo "Atalho criado com sucesso"
-echo
-echo -e "Caso queira certificar que o atalho foi criado com sucesso\nRode o comando\n
-abaixo no Terminal"
-echo
-echo "ls /usr/share/applications | grep 'teamspeak'"
-sleep 5
+ensure_flathub() {
+  if flatpak remote-list | awk '{print $1}' | grep -qx "flathub"; then
+    return 0
+  fi
+
+  echo "Adicionando Flathub..."
+  flatpak remote-add --if-not-exists flathub "$FLATHUB_URL"
 }
 
-clear
-echo "Esse script instalará o Teamspeak 3.0.18.2"
-echo
-echo -e "Caso tenha uma versão mais recente visite o site\n
-oficial do desenvolvedor, pois em breve esse script será atualizado\npara a nova
-versão "
-echo
-read -n1 -p "Deseja continuar com a instalação? s/n" -s escolha
-  case $escolha in
-    s|S) echo
-      architecture ; shortcuts
+install_teamspeak() {
+  check_connection || {
+    echo "Sem conexão com a internet."
+    exit 1
+  }
+
+  ensure_flatpak
+  ensure_flathub
+
+  echo "Instalando $APP_ID..."
+  flatpak install -y flathub "$APP_ID"
+
+  echo "Concluído. Execute com: flatpak run $APP_ID"
+}
+
+remove_teamspeak() {
+  if ! command -v flatpak >/dev/null 2>&1; then
+    echo "Flatpak não encontrado. Nada para remover."
+    return 0
+  fi
+
+  echo "Removendo $APP_ID..."
+  flatpak uninstall -y "$APP_ID" || true
+  echo "Concluído."
+}
+
+main() {
+  clear
+  echo "TeamSpeak Installer 2026"
+  echo
+  echo "i) Instalar"
+  echo "r) Remover"
+  echo "s) Sair"
+  echo
+
+  read -r -n1 -p "Escolha i(instalar), r(remover) ou s(sair): " escolha
+  echo
+
+  case "$escolha" in
+    i|I)
+      install_teamspeak
       ;;
-      n|N) echo
-      echo Finalizando script!!!...
-      sleep 3
-      exit
+    r|R)
+      remove_teamspeak
       ;;
-      *) echo
-      echo Alternativas incorretas. Fechando script!!!
-      sleep 1
-      exit
+    s|S)
+      echo "Saindo..."
+      ;;
+    *)
+      echo "Alternativa inválida."
+      exit 1
       ;;
   esac
+}
+
+main

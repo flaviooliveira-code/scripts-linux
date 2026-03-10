@@ -1,13 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #script para automatizar a execução de backup
 #utiliza o programa rsync para backup e zenity para fazer as GUI
 #
-#ano: 2016
-#por Flávio Oliveira (Flávio Dicas)
-#http://www.flaviodeoliveira.com.br
-#http://www.youtube.com/flaviodicas
-#https://github.com/oliveiradeflavio
-#oliveiradeflavio@gmail.com
+#ano: 2016 (atualizado para 2026-03)
+#por Flávio Oliveira
+
 
 bkpinc()
 {
@@ -29,7 +26,7 @@ echo
 read -n1 -p "As informações estão corretas? s/n =  " escolha
 case $escolha in
   S|s) echo
-    rsync -Cavzpu --progress $bkplocal $bkpdest
+    rsync -Cavzpu --progress "$bkplocal" "$bkpdest"
     ;;
   N|n) echo
     bkpinc
@@ -62,7 +59,7 @@ bkpfull()
   read -n1 -p "As informações estão corretas? s/n =  " escolha 
   case $escolha in
   S|s) echo
-    rsync -bzpvrl --progress $bkplocal $bkpdest
+    rsync -bzpvrl --progress "$bkplocal" "$bkpdest"
     ;;
   N|n) echo
     bkpfull

@@ -1,128 +1,89 @@
-#!/bin/bash
-#02/12/2015 - última atualização 13/02/2017
-#script irá fazer a instalação do programa Popcorntime manualmente
-#sem a adição de PPA's
-#
-#por Flávio Oliveira
-#http://flaviodeoliveira.com.br
-#http://youtube.com/flaviodicas
-#https://github.com/oliveiradeflavio
+#!/usr/bin/env bash
+# 02/12/2015 - Atualizado para 2026-03
+# Instalação/remoção do Popcorn Time via Flatpak (método mais estável em 2026).
 
-if [[ `id -u` -eq 0 ]]; then
-	echo
-		echo "Execute esse script sem ser ROOT"
-		echo "Saindo do script..."
-		sleep 5
-		exit
-fi
+set -u
 
-testconnection()
-{
-echo "Aguarde!!! Verificando conexão com a internet"
-if ! ping -c 7 www.google.com.br 1>/dev/null 2>/dev/stdout; then
-	echo "Alguns módulos desse script precisa de conexão com a internet para serem executado"
-	sleep 3
-	read -p "Deseja refazer o teste de conexão? s/n: " -n1 escolha
-	case $escolha in
-			s|S) echo
-				clear
-				testaconexao
-				;;
-			n|N) echo
-				echo Finalizando script...
-				sleep 2
-				exit
-				;;
-			*) echo
-				echo Alternativas incorretas ... Saindo!!!!
-				sleep 2
-				exit
-				;;
-	esac
-else
-	echo "Teste de conexão está ok"
-	sleep 1
+APP_ID="app.popcorntime.PopcornTime"
+FLATHUB_URL="https://flathub.org/repo/flathub.flatpakrepo"
 
-fi
+check_connection() {
+  echo "Verificando conexão com a internet..."
+  ping -c 2 1.1.1.1 >/dev/null 2>&1
 }
 
-architecture()
-{
-clear
-cd /tmp/
+ensure_flatpak() {
+  if command -v flatpak >/dev/null 2>&1; then
+    return 0
+  fi
 
-	if uname -m | grep '64' 1>/dev/null 2>/dev/stdout; then
-		echo "Download Popcorntime"
-		echo
-		testconnection
-		wget https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-64.tar.xz -O popcorntime.tar.xz
-        mkdir /opt/popcorntime
-		tar Jxf popcorntime.tar.xz -C /opt/popcorntime/ 1>/dev/null 2>/dev/stdout
-        ln -sf /opt/popcorntime/Popcorn-Time /usr/bin/Popcorn-Time
-        echo -e '[Desktop Entry]\n Version=1.0\n Name=popcorntime\n Exec=/opt/popcorntime/Popcorn-Time\n Icon=/opt/popcorntime/src/app/images/icon.png\n Type=Application\n Categories=Application' | sudo tee /usr/share/applications/popcorntime.desktop
-        chmod +x /usr/share/applications/popcorntime.desktop
-        cp /usr/share/applications/popcorntime.desktop  ~/Área\ de\ Trabalho/
-	else
-		echo "Download Popcorntime"
-		echo
-		testconnection
-		wget https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-32.tar.xz -O popcorntime.tar.xz
-        mkdir /opt/popcorntime
-		tar Jxf popcorntime.tar.xz -C /opt/popcorntime/ 1>/dev/null 2>/dev/stdout
-        ln -sf /opt/popcorntime/Popcorn-Time /usr/bin/Popcorn-Time
-        echo -e '[Desktop Entry]\n Version=1.0\n Name=popcorntime\n Exec=/opt/popcorntime/Popcorn-Time\n Icon=/opt/popcorntime/src/app/images/icon.png\n Type=Application\n Categories=Application' | sudo tee /usr/share/applications/popcorntime.desktop
-        chmod +x /usr/share/applications/popcorntime.desktop
-        cp /usr/share/applications/popcorntime.desktop  ~/Área\ de\ Trabalho/
-        
-	fi
-echo
-echo "Concluído"
+  echo "Flatpak não encontrado. Instalando..."
+  sudo apt-get update && sudo apt-get install -y flatpak
 }
 
-verify()
-{
-clear
-	echo "Verificando Instalações anteriores..."
-	echo " Por favor aguarde..."
-	sleep 2
-		rm -Rf /opt/popcorntime
-		rm -Rf /usr/bin/Popcorn-Time
-		rm -Rf /usr/share/applications/popcorntime.desktop
-		rm -Rf ~/.Popcorn-Time
-		rm -Rf ~/.local/share/applications/Popcorn-Time.desktop
-		rm -Rf ~/.local/share/icons/popcorntime.png
-		rm -Rf ~/.config/Popcorn-Time
-		echo "Remoção concluída"
-	
-echo
-echo "Concluído"
+ensure_flathub() {
+  if flatpak remote-list | awk '{print $1}' | grep -qx "flathub"; then
+    return 0
+  fi
+
+  echo "Adicionando repositório Flathub..."
+  flatpak remote-add --if-not-exists flathub "$FLATHUB_URL"
 }
-clear
-	echo "Bem vindo"
-	echo
-	echo "i) Instalar"
-	echo
-	echo "r) Remover"
-	echo
-	echo "s) Sair"
-	echo
-	read -n1 -p "Escolha i(instalar), r(remover) ou s(sair)  " -s escolha
-		case $escolha in
-			i|I) echo
-				echo Analisando sistema
-				verify ; architecture
-				;;
-			r|R) echo
-				echo Aguarde...
-				verify
-				;;
-			s|S) echo
-				echo Saindo...
-				sleep 1 ; exit
-				;;			
-			*) echo
-				echo Alternativas incorretas, saindo!
-				sleep 1
-				exit
-				;;
-		esac
+
+install_app() {
+  check_connection || {
+    echo "Sem conexão com a internet."
+    exit 1
+  }
+
+  ensure_flatpak
+  ensure_flathub
+
+  echo "Instalando $APP_ID..."
+  flatpak install -y flathub "$APP_ID"
+
+  echo "Instalação concluída."
+  echo "Para abrir: flatpak run $APP_ID"
+}
+
+remove_app() {
+  if ! command -v flatpak >/dev/null 2>&1; then
+    echo "Flatpak não encontrado. Nada para remover."
+    return 0
+  fi
+
+  echo "Removendo $APP_ID..."
+  flatpak uninstall -y "$APP_ID" || true
+  echo "Remoção concluída."
+}
+
+main() {
+  clear
+  echo "Bem-vindo"
+  echo
+  echo "i) Instalar"
+  echo "r) Remover"
+  echo "s) Sair"
+  echo
+
+  read -r -n1 -p "Escolha i(instalar), r(remover) ou s(sair): " escolha
+  echo
+
+  case "$escolha" in
+    i|I)
+      install_app
+      ;;
+    r|R)
+      remove_app
+      ;;
+    s|S)
+      echo "Saindo..."
+      ;;
+    *)
+      echo "Alternativa inválida."
+      exit 1
+      ;;
+  esac
+}
+
+main

@@ -1,18 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Data inicial: 30/11/2015
+# Atualizado para 2026-03
 # O script faz a limpeza de arquivos que não estão sendo mais utilizados pelo
 # sistema. Como bibliotecas obsoletas, caches de programas, configurações etc.
 # O script faz a verificação de dois programas "preload e deborphan". Se os mesmos
 # não estiverem instalado, a instalação ocorrerá automaticamente se o usuário permitir
 #
-# Flávio Oliveira (Flávio Dicas)
-# http://www.flaviodeoliveira.com.br
-# http://www.youtube.com/flaviodicas
-# http://github.com/oliveiradeflavio
+# Flávio Oliveira --- IGNORE ---
 
 
-if [[ `id -u` -ne 0 ]]; then
+if [[ $(id -u) -ne 0 ]]; then
 	echo
 		zenity --info --text="Você precisa ter poderes administrativos (root)
 

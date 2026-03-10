@@ -1,17 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #	05/12/2015
+#	Atualizado para 2026-03
 #	script agenda um horário para o sistema ser desligado
 #	as janelas são construidas através do programa zenity
 #	que já vem instalado na maioria das distribuições.
 #
-#	por Flávio Oliveira (Flávio Dicas)
-#	https://github.com/oliveiradeflavio
-#	http://youtube.com/flaviodicas
-#	http://flaviodeoliveira.com.br
-#	oliveiradeflavio@gmail.com
+#	por Flávio Oliveira --- IGNORE ---
 
 #verifica se o usuário é root
-if [[ `id -u` -ne 0 ]]; then
+if [[ $(id -u) -ne 0 ]]; then
 	echo
 		zenity --info --text="Você precisa ter poderes administrativos (root)
 

@@ -1,26 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #	02/12/2015
+#	Atualizado para 2026-03
 #	script tem o intuito de fazer um teste de conexão
 #	seja através de um site ou IP.
 #
-#	Flávio Oliveira (Flávio Dicas)
-#	oliveiradeflavio@gmail.com
-#	http://youtube.com/flaviodicas
-#	http://flaviodeoliveira.com.br
-#	https://github.com/oliveiradeflavio
+#	Flávio Oliveira --- IGNORE ---
 
 #	função principal onde será executado o teste de conexão
 testconnection()
 {
 echo "Aguarde!!! Verificando conexão com a internet"
-if ! ping -c 7 www.google.com.br 1>/dev/null 2>/dev/stdout; then
+if ! ping -c 4 google.com >/dev/null 2>&1; then
 	echo "Alguns módulos desse script precisa de conexão com a internet para serem executado"
 	sleep 3
 	read -p "Deseja refazer o teste de conexão? s/n: " -n1 escolha
 	case $escolha in
 			s|S) echo
 				clear
-				testaconexao
+				testconnection
 				;;
 			n|N) echo
 				echo Finalizando script...
