@@ -3,7 +3,6 @@
 #utiliza o programa rsync para backup e zenity para fazer as GUI
 #
 #ano: 2016 (atualizado para 2026-03)
-#por Flávio Oliveira
 
 
 bkpinc()
@@ -103,7 +102,7 @@ ajuda()
 
 checkprog()
 {
-  which -a apt 1>/dev/null 2>/dev/stdout
+  which -a apt >/dev/null 2>&1
   if [ $? -eq 0 ]; then
     echo
   else
@@ -114,11 +113,11 @@ checkprog()
     exit
   fi
 clear
-if which -a rsync 1>/dev/null 2>/dev/stdout || which -a zenity 1>/dev/null 2>/dev/stdout ; then
+if which -a rsync >/dev/null 2>&1 && which -a zenity >/dev/null 2>&1 ; then
   echo
 else
   echo -e "Você precisa do rsync e zenity para prosseguir.\nAguarde a instalação ..."
-  sudo apt-get install rsync zenity -y 1>/dev/null 2>/dev/stdout
+  sudo apt-get install rsync zenity -y >/dev/null 2>&1
   sleep 2
 fi
 clear
@@ -131,7 +130,7 @@ mainmenu()
   echo "#############################################################"
   echo "#                     BACKUP AUTOMÁTICO                     #"
   echo "#                                                           #"
-  echo "# utilizando o programa 'rsync' e 'zenity' por Flávio Dicas #"
+  echo "# utilizando o programa 'rsync' e 'zenity'                  #"
   echo "#############################################################"
   echo
   echo "F) - Backup Full "

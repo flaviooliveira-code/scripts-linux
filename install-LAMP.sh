@@ -4,7 +4,6 @@
 #	script irá instalar o LAMP no seu sistema Linux
 #	Linux, Apache, MySQL e PHP
 #
-#	Flávio Oliveira --- IGNORE ---
 
 #	verifica se o usuário é root
 if [[ $(id -u) -ne 0 ]]; then

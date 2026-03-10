@@ -3,7 +3,6 @@
 #	Atualizado para 2026-03
 #	Restaura as configurações de fábrica da Interface Unity
 #
-#	por Flávio Oliveira --- IGNORE ---
 
 #verifica se o usuário é root (via interface zentiy)
 if [[ $(id -u) -ne 0 ]]; then

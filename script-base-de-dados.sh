@@ -26,6 +26,11 @@ for file in *.txt; do
 done
 
 cd filtrado2
-sed -n p ./*.txt > dados.csv
+
+if compgen -G "*.txt" >/dev/null; then
+  sed -n p ./*.txt > dados.csv
+else
+  : > dados.csv
+fi
 
 echo "Finalizado!!!"

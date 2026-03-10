@@ -5,7 +5,6 @@
 #	as janelas são construidas através do programa zenity
 #	que já vem instalado na maioria das distribuições.
 #
-#	por Flávio Oliveira --- IGNORE ---
 
 #verifica se o usuário é root
 if [[ $(id -u) -ne 0 ]]; then

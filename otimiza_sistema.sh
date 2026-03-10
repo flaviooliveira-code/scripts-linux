@@ -5,7 +5,6 @@
 #	Diminuindo a prioridade de uso do SWAP e instalando
 #	alguns programas Prelink e Preload
 #
-#	Flávio Oliveira --- IGNORE ---
 
 #verifica se o usário é root
 if [[ $(id -u) -ne 0 ]]; then

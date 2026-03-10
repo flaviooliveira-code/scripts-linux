@@ -6,7 +6,6 @@
 #é preciso ter a VM no programa virtualbox e a mesma feita com o usuário root
 #use script junto com o script vboxcontrol que está na mesma pasta
 #
-#por Flávio Oliveira --- IGNORE ---
 
 
 if [[ $(id -u) -ne 0 ]]; then

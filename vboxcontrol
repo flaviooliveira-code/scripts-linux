@@ -8,8 +8,7 @@
 # Short-Description: Control VirtualBox Virtual Machine instances
 ### END INIT INFO
 #
-# Version 2008051100 by Jochem Kossen <jochem.kossen@gmail.com>
-# http://farfewertoes.com
+# Version 2008051100
 #
 # Released in the public domain
 #
@@ -18,7 +17,6 @@
 #
 #testado no ubuntu server 12.04 64 bits
 #atualizado para 2026-03 (manutenção de compatibilidade)
-#por Flávio Oliveira
 
 . /lib/lsb/init-functions
 

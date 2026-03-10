@@ -4,7 +4,6 @@
 #	script tem o intuito de fazer um teste de conexão
 #	seja através de um site ou IP.
 #
-#	Flávio Oliveira --- IGNORE ---
 
 #	função principal onde será executado o teste de conexão
 testconnection()

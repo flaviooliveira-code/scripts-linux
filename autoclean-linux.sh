@@ -7,7 +7,6 @@
 # O script faz a verificação de dois programas "preload e deborphan". Se os mesmos
 # não estiverem instalado, a instalação ocorrerá automaticamente se o usuário permitir
 #
-# Flávio Oliveira --- IGNORE ---
 
 
 if [[ $(id -u) -ne 0 ]]; then
